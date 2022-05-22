@@ -1,0 +1,508 @@
+.GoB{
+    position: absolute;
+    width: 96px;
+    height: 24px;
+    left: 16px;
+    top: 72px;
+}
+.img{
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 0px;
+    top: 0px;
+}
+.go-back {
+    position: absolute;
+    width: 60px;
+    height: 22px;
+    left: 36px;
+    top: 2px;
+    
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+   
+    text-transform: capitalize;
+    
+    color: #000000;
+}
+.Cp{
+    position: absolute;
+    width: 238px;
+    height: 55px;
+    left: 16px;
+    top: 120px;
+}
+.titleCard {
+    position: absolute;
+    width: 100%px;
+    height: 28px;
+    left: 0px;
+    top: 0px;
+    /* Med 24 */
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+
+    color: #18325B;
+}
+.select-a-plan-for-yo {
+    position: absolute;
+    width: 277px;
+    height: 19px;
+    left: 1px;
+    top: 36px;
+
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 19px;
+    /* identical to box height */
+
+
+    color: #838383;
+}
+.Card{
+    /* iPhone 11 Pro / X - 32 */
+    position: relative;
+    width: 100%;
+    height: 812px;
+
+    background: #F5F6F9;
+}
+.CardVisa{
+    /* Frame 4335 */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 14px;
+
+    position: absolute;
+    width: 336px;
+    height: 86px;
+    left: 17px;
+    top: 199px;
+
+    background: #FFFFFF;
+    border: 1.5px solid rgba(220, 220, 220, 0.51);
+    box-sizing: border-box;
+    border-radius: 16px;
+}
+.CardVisa2{
+    /* Frame 4336 */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 14px;
+
+    position: absolute;
+    width: 336px;
+    height: 86px;
+    left: 16px;
+    top: 301px;
+
+    background: #FFFFFF;
+    border: 1.5px solid rgba(220, 220, 220, 0.51);
+    box-sizing: border-box;
+    border-radius: 16px;
+}
+.CardBasiquePLan{
+    /* Frame 4338 */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 14px;
+
+    position: absolute;
+    width: 336.21px;
+    height: 82px;
+    left: 16px;
+    top: 446px;
+
+    background: #FFFFFF;
+    border: 1.5px solid rgba(220, 220, 220, 0.51);
+    box-sizing: border-box;
+    border-radius: 16px;
+}
+.AddCard1{ 
+    position: absolute;
+    width: 88px;
+    height: 19px;
+    left: 263px;
+    top: 407px;
+
+    /* Reg 16 */
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    /* identical to box height */
+
+
+    /* Default */
+
+    color: #265CB3;
+}
+.AddCard2{
+    /* + Add Banks */
+    position: absolute;
+    width: 90px;
+    height: 19px;
+    left: 261px;
+    top: 548px;
+
+    /* Reg 16 */
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    /* identical to box height */
+
+
+    /* Default */
+
+    color: #265CB3;
+}
+.Current{
+    /* Current Subscriptions */
+    position: absolute;
+    width: 234px;
+    height: 28px;
+    left: 16px;
+    top: 593px;
+
+    /* Med 24 */
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+
+    color: #18325B;
+
+}
+.listSub{
+    /* List of all your subscriptions */
+    position: absolute;
+    width: 201px;
+    height: 19px;
+    left: 17px;
+    top: 629px;
+    /* Reg 16 */
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    /* identical to box height */
+
+
+    color: #838383;
+}
+.BasciPlan{
+    /* Frame 4339 */
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 14px;
+
+    position: absolute;
+    width: 336.21px;
+    height: 82px;
+    left: 16px;
+    top: 668px;
+
+    background: #FFFFFF;
+    border: 1.5px solid rgba(220, 220, 220, 0.51);
+    box-sizing: border-box;
+    border-radius: 16px;
+}
+.Primary{
+    /* Frame 4337 */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: Inside;
+    padding: 4px 10px; 
+    position: relative;
+    width: 65px;
+    height: 22px;
+    left: 120px;
+    top: -42px;
+    background: #E3F9E8;
+    border: 1px solid #4BCF68;
+    box-sizing: border-box;
+    border-radius: 22px;
+}
+.PrimaryText{
+    position: static;
+    width: 42px;
+    height: 14px;
+    left: 10px;
+    top: 4px;
+
+    /* Reg 12 */
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    /* identical to box height */
+    color: #4BCF68;
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 10px;
+}
+.Kitcard{
+    /* Frame 4334 */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    position: absolute;
+    width: 207px;
+    height: 58px;
+    left: 14px;
+    top: 14px;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 84px;
+}
+.KitcardImage{
+    /* Frame 4332 */
+    position: static;
+    width: 84px;
+    height: 58px;
+    left: 0px;
+    top: 0px;
+
+    border-radius: 12px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 17px;
+}
+.imgKitCard{
+    position: absolute;
+    height: 58px;
+    left: -90.62px;
+    top: -2px;
+    border-radius: 25px;
+    width: 84px;
+    height: 58px;
+
+    background: #C4C4C4;
+    border-radius: 15px;
+}
+.imgKitCardIcon{
+    position: absolute;
+    height: 58px;
+    left: -90.62px;
+    top: -2px;
+    border-radius: 25px;
+    width: 84px;
+    height: 58px;
+
+    background: #C4C4C4;
+    border-radius: 15px;
+}
+.iIcon{
+    position: absolute;
+    width: 19.85px;
+    height: 19.85px;
+    left: 30px;
+    top: 12px;
+    
+}
+.iIconText{
+    position: absolute;
+    width: 40px;
+    height: 7px;
+    left: 22px;
+    top: 35px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 6px;
+    line-height: 7px;
+    /* identical to box height */
+
+    text-transform: uppercase;
+
+    color: rgba(0, 0, 0, 0.41);
+}
+.imgKitCard7{
+    position: absolute;
+    height: 58px;
+    left: -96px;
+    top: -2px;
+    border-radius: 25px;
+    width: 100px;
+    height: 58px;
+
+    background: #C4C4C4;
+    border-radius: 15px;
+}
+.imgKitCardF{
+    position: absolute;
+    height: 58px;
+    left: -90.62px;
+    top: -2px;
+    border-radius: 25px;
+    width: 80px;
+    height: 58px;
+
+    background: #C4C4C4;
+    border-radius: 15px;
+}
+.KitcardText{
+   /* Frame 4333 */
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+
+    position: static;
+    width: 150px;
+    height: 40px;
+    left: 50px;
+    top: 9px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 17px;
+}
+.KitcardText1{
+   /* Visa XXXX 1657 */
+    position: absolute;
+    width: 102px;
+    height: 16px;
+    left: 10px;
+    top: 0px;
+    /* Med 14 */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #323232;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 8px 0px;
+}
+.KitcardText1F{
+    position: absolute;
+    width: 120px;
+    height: 16px;
+    left: 10px;
+    top: 0px;
+    /* Med 14 */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #323232;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 8px 0px;
+}
+.KitcardText2{
+    /* Expires on 16/24 */
+    position: absolute;
+    width: 200px;
+    height: 16px;
+    left: 10px;
+    top: 24px;
+    /* Med 14 */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: rgba(131, 131, 131, 0.65);
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 8px 0px;
+}
+.KitcardText2F{
+    /* Expires on 16/24 */
+    position: absolute;
+    width: 250px;
+    height: 16px;
+    left: 10px;
+    top: 24px;
+    /* Med 14 */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: rgba(131, 131, 131, 0.65);
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 8px 0px;
+}
+.kitbouton{
+    position: relative;
+    width: 17px;
+    height: 5.67px;
+    left: 115px;
+    top: 15px;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+   
+}
+

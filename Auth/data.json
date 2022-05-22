@@ -1,0 +1,28 @@
+{
+    "users":[
+        {
+            "id":1,
+            "username":"toky",
+            "email":"toky@gmail.com",
+            "password":"tokymdp"
+        },
+        {
+            "id":2,
+            "username":"thino",
+            "email":"thino@gmail.com",
+            "password":"thinomdp"
+        },
+        {
+            "id":3,
+            "username":"John do",
+            "email":"Jdo@gmail.com",
+            "password":"Jdomdp"
+        },
+        {
+            "id":4,
+            "username":"user",
+            "email":"user@gmail.com",
+            "password":"usermp"
+        }    
+    ]
+}

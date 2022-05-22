@@ -1,0 +1,97 @@
+{
+  "cardItem": [
+    {
+      "id": 1,
+      "name": "JohnDo",
+      "locationId": 1
+    },
+    {
+      "id": 2,
+      "name": "JohnDo",
+      "locationId": 1
+    },
+    {
+      "id": 3,
+      "name": "JohnDo",
+      "locationId": 1
+    },
+    {
+      "id": 4,
+      "name": "JohnDo",
+      "locationId": 1
+    },
+    {
+      "id": 5
+    },
+    {
+      "id": 6
+    },
+    {
+      "id": 7
+    },
+    {
+      "id": 8
+    },
+    {
+      "id": 9
+    },
+    {
+      "id": 10
+    },
+    {
+      "id": 11
+    },
+    {
+      "id": 12
+    },
+    {
+      "id": 13
+    },
+    {
+      "id": 14
+    },
+    {
+      "id": 15
+    },
+    {
+      "id": 16
+    },
+    {
+      "id": 17
+    },
+    {
+      "id": 18
+    }
+  ],
+  "locations": [
+    {
+      "id": 1,
+      "name": "Location001"
+    },
+    {
+      "id": 2,
+      "name": "Location002"
+    },
+    {
+      "id": 3,
+      "name": "Location003"
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "contact": "0345585555",
+      "nombreViews": 2
+    },
+    {
+      "id": 2,
+      "contact": "0325558555",
+      "nombreViews": 1
+    },
+    {
+      "id": 3,
+      "contact": "0385555555",
+      "nombreViews": 12
+    }
+  ]
+}

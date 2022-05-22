@@ -1,0 +1,170 @@
+.Maskgroupe{
+    position: relative;
+    width: 100%;
+    height: 194px;
+    left: 0px;
+    top: 0px;
+}
+.Nav{
+    position: absolute;
+    width: 100%;
+    height: 35px;
+    left: 0px;
+    top: 0px;
+}
+.NavFram4234{
+    /* Frame 4234 */
+    position: relative;
+    width: 100%;
+    height: 33px;
+    background: linear-gradient(180deg, #000000 -19.7%, rgba(196, 196, 196, 0) 114.84%);
+}
+.NavFram593{
+    position: relative;
+    width: 20.45px;
+    height: 25px;
+    left: 16px;
+    top: 5px;
+}
+.NavText{
+    position: relative;
+    width: 196px;
+    height: 16px;
+    left: 40px;
+    top: -33px;
+    /* Reg 14 */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: right;
+    color: #FFFFFF;
+}
+.NavGetstart{
+    /* Frame 4159 */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 5.05435px;
+    position: absolute;
+    width: 75px;
+    height: 24.11px;
+    left: 280px;
+    top: 6px;
+
+    border: 0.505435px solid rgba(255, 255, 255, 0.75);
+    box-sizing: border-box;
+    border-radius: 6.06522px;
+}
+.TextNavGetstart{
+    position: relative;
+    width: 64px;
+    height: 14px;
+    left: -5px;
+    top: 0px;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 9.09783px;
+    line-height: 14px;
+    /* identical to box height */
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 5.05435px;
+}
+.PhotoProfile{
+    position: relative;
+    width: 100%;
+    height: 208.37px;
+    left: 23px;
+    top: 49px;
+
+    filter: drop-shadow(0px 3px 9px rgba(45, 92, 167, 0.25));
+}
+.cadrepdp{
+    position: relative;
+    width: 100%;
+    height: 208.37px;
+    left: -0px;
+    top: -180px;
+}
+.image1{
+    position: relative;
+    width: 176.36px;  
+    height: 209.98px;
+    left: -11.35px;
+    top: 12px;
+}
+.rectangle{
+    position: relative;
+    width: 176.36px;
+    height: 209.98px;
+    left: -11.35px;
+    top: 12px;
+    background: #383838;
+}
+.About{
+    /* Frame 4241 */
+    position: absolute;
+    width: 349px;
+    height: 461px;
+    left: 13px;
+    top: 283px;
+    overflow-y: scroll;
+
+}
+.Title{
+    /* About */
+    position: absolute;
+    width: 59px;
+    height: 24px;
+    left: 3px;
+    top: 0px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 119%;
+    /* identical to box height, or 24px */
+
+    letter-spacing: 0.05em;
+
+    /* Style */
+
+    color: #000000;
+}
+.Description{
+    position: relative;
+    width: 343px;
+    height: 34px;
+    left: 3px;
+    top: 44px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 119%;
+    /* or 17px */
+    /* #969796 */
+    color: #969796;
+
+}
+.Qrcode{
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 289px;
+    top: 27px;
+
+}

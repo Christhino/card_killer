@@ -1,0 +1,294 @@
+class AccountTests(APITestCase):
+
+    def test_create_account(self):
+        """
+        Ensure we can create a new account object.
+        """
+
+        # create user without parameters
+        res = self.client.post('/ck_register/')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+        user = {'first_name': 'tester', 'last_name': 'djangololo',
+        'email': 'test@cardkiller.me', 'password': 'passmethekey'}
+
+        # create user
+        res = self.client.post('/ck_register/', user)
+        self.assertEqual(UserCK.objects.count(), 1)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # then add the same user
+        res = self.client.post('/ck_register/', user)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(UserCK.objects.count(), 1)
+
+        ### Test JWT login to this account
+
+        # if he never registered
+        res = self.client.post('/ck_token/', {'email': 'dont@exist.com', 'password': 'notapass'})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # if he is registered in the database but he didn't confirm his registration by mail
+        res = self.client.post('/ck_token/', {'email': user['email'], 'password': user['password']})
+        self.assertContains(res, 'No active account found', status_code=status.HTTP_401_UNAUTHORIZED)
+
+        # now simulate user activation to test the login
+        user_to_activate = UserCK.objects.get(email=user['email'])
+        user_to_activate.is_active = True
+        user_to_activate.save()
+
+        # then retry login
+        res = self.client.post('/ck_token/', {'email': user['email'], 'password': user['password']})
+        self.assertContains(res, 'access', status_code=status.HTTP_200_OK)
+
+        # store access JWT token
+        access = ToJson(res.content)['access']
+
+        ### Link        
+
+        # try to build a link with no token
+        res = self.client.put('/ck_link/', {'name': 'link1', 'url': 'https://www.google.com'})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # try to build a link with a fake access token but no data
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer' + 'abc')
+        res = self.client.put('/ck_link/')
+
+        # try to build a link with a good access token but no data
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_link/')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # try to build a link with a good access token and url but no name
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_link/', {'url': 'https://www.google.com'})
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # build a link with a good access token and url and name and position order
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_link/', {'url': 'https://www.google.com/1', 'name': 'link2', 'position_order': 1})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        res = self.client.put('/ck_link/', {'url': 'https://www.google.com/2', 'name': 'link2', 'position_order': 2})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        res = self.client.put('/ck_link/', {'url': 'https://www.google.com/3', 'name': 'link3', 'position_order': 3})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(Link.objects.count(), 3)
+        link3_id = ToJson(res.content)['link_id']
+        goto_link = ToJson(res.content)['url']
+        url_final = 'https://www.google.com/3'
+
+        # change the 3rd link's position_order to 33 and the name to link33
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_link/'+link3_id, { 'name': 'link33', 'position_order': 33})
+        self.assertContains(res, 'link33', status_code=status.HTTP_200_OK)
+
+        # get all link
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.get('/ck_link/')        
+        self.assertEqual(res.status_code, status.HTTP_200_OK)         
+
+        ### Goto link
+
+        # goto a fake url (should redirect to API url)
+        res = self.client.get('/go/fakeurl/', follow=True)
+        self.assertEqual(res.redirect_chain[-1][0], settings.URL_LANDING)
+        self.assertEqual(res.redirect_chain[-1][1], status.HTTP_302_FOUND)
+        
+        # goto a fake uid (should redirect to URL_LANDING)
+        fake_uid = 'd7571fcb-2efa-42f2-bad8-827d2800245a'
+        res = self.client.get('/go/'+fake_uid, follow=True)
+        self.assertEqual(res.redirect_chain[-1][0], settings.URL_LANDING)
+        self.assertEqual(res.redirect_chain[-1][1], status.HTTP_302_FOUND)
+        
+        # goto a good url
+        tracker = goto_link.split('/')[-1]
+        res = self.client.get('/go/'+tracker, follow=True)
+        self.assertEqual(res.redirect_chain[-1][0], url_final)
+        self.assertEqual(res.redirect_chain[-1][1], status.HTTP_302_FOUND)
+
+        # desactivate url and try to goto
+        link3 = Link.objects.get(id=link3_id)
+        link3.is_active = False
+        link3.save()
+        res = self.client.get(goto_link, follow=True)
+        self.assertEqual(res.redirect_chain[-1][0], settings.URL_LANDING)
+        self.assertEqual(res.redirect_chain[-1][1], status.HTTP_302_FOUND)
+
+        # delete a link
+        res = self.client.delete('/ck_link/'+link3_id)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+
+        # goto a good url but deleted (should redirect to URL_LANDING)
+        tracker = goto_link.split('/')[-1]
+        res = self.client.get('/go/'+tracker, follow=True)
+        self.assertEqual(res.redirect_chain[-1][0], settings.URL_LANDING)
+        self.assertEqual(res.redirect_chain[-1][1], status.HTTP_302_FOUND)
+ 
+        ### Category
+
+        # create a link
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_link/', {'url': 'https://www.google.com/link', 'name': 'Link Kat', 'position_order': 1})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        link_kat_id = ToJson(res.content)['link_id']
+
+        # create category
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_category/', {'name': 'ma kat'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # get all categories
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.get('/ck_category/')        
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        kat_id = ToJson(res.content)['categories'][-1]['id']
+        kat_id_2 = ToJson(res.content)['categories'][-2]['id']
+
+        # update category's name
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_category/'+kat_id, {'name': 'New Ma Kat'})
+        self.assertContains(res, 'New Ma Kat', status_code=status.HTTP_200_OK)
+        
+        # set link into a category
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_link/'+link_kat_id, {'category': kat_id})
+        self.assertContains(res, 'Link Kat', status_code=status.HTTP_200_OK)
+
+        # try to delete category (currently used by a link, should not be permetted)
+        res = self.client.delete('/ck_category/'+kat_id)
+        self.assertEqual(res.status_code, status.HTTP_409_CONFLICT)
+
+        # set link to another existing category
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.put('/ck_link/'+link_kat_id, {'category': kat_id_2})
+        self.assertContains(res, 'Link Kat', status_code=status.HTTP_200_OK)      
+
+        # verify if link is in the good category
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.get('/ck_link/'+link_kat_id)
+        self.assertContains(res, kat_id_2, status_code=status.HTTP_200_OK)
+        
+        # delete category kat_id
+        res = self.client.delete('/ck_category/'+kat_id)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+
+        # count all remaining categories (should be 2)
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access)
+        res = self.client.get('/ck_category/')        
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(ToJson(res.content)['categories']), 2)
+
+
+
+
+
+     const [links,fetchLinks]=useState([]);
+    
+    const token = localStorage.getItem('token');
+    console.log("token =>" , token);
+    const getData =()=>{
+        fetch(URL_API + '/ck_link/',{
+            headers: {
+				'Authorization':`Bearer ${token}`
+			}
+        })
+        .then((res) =>  res.json())
+        .then((res) => {
+            console.log(res.links)
+            fetchLinks(res.links)
+        })
+    }
+    useEffect(() => {
+        getData()
+    }, [token])
+
+   /ck_user/upload_photo/
+
+
+
+
+
+
+
+
+
+    import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import * as styles from "../../styles/variables";
+
+//components
+import ToggleButton from "../Common/ToggleButton";
+import {sortableHandle, SortableElement} from "react-sortable-hoc";
+
+//icons
+import { GrDrag } from "react-icons/gr";
+import { MdModeEditOutline, MdBarChart, MdOutlineDragHandle } from "react-icons/md";
+import { IoLinkOutline, IoImageOutline } from "react-icons/io5";
+import { CgArrowUp } from "react-icons/cg";
+import { BiCaretDown, BiTrash } from "react-icons/bi";
+
+
+const DragHandle = sortableHandle(() => <div className="handle"> <MdOutlineDragHandle /> </div>);
+const URL_API = "https://api.cardkiller.me";
+
+function LinkItem(props){
+
+    const [links,fetchLinks]=useState([]);
+    
+    const token = localStorage.getItem('token');
+    console.log("token =>" , token);
+    const getData =()=>{
+        fetch(URL_API + '/ck_link/',{
+            headers: {
+				'Authorization':`Bearer ${token}`
+			}
+        })
+        .then((res) =>  res.json())
+        .then((res) => {
+            console.log(res.links)
+            fetchLinks(res.links)
+        })
+    }
+    useEffect(() => {
+        getData()
+    }, [token])
+    return (
+        <Item>
+            <DragHandle/>
+            <div className="content">
+                {links.map((item) => ( 
+                    <div>
+                         <div className="top">
+                            <span className="title">{item.name}<button><MdModeEditOutline /></button> </span>
+                            <ToggleButton 
+                                enabled={props.link.enabled} 
+                                linkId={props.link.id}
+                                toggleLink={props.toggleLink}
+                            />
+                        </div>
+                        <span className="link">
+                            <a href={item.url} target='blank'>{item.url}</a><IoLinkOutline />
+                        </span>
+                    </div>                
+                ))}
+                    
+                    
+                <div className="bottom">
+                    <IoImageOutline className="linkIcon" />
+                    <span className="clicks">
+                        <MdBarChart className="icon" />
+                        {props.link.clicks} clicks
+                        <CgArrowUp style={{ color: '#4BCF68' }} className="icon" />
+                    </span>
+                    <span className="category" onClick={() => props.selectCategory(props.link.id)}>
+                        Social network <BiCaretDown />
+                    </span>
+                    <button className="delete">
+                        <BiTrash />
+                    </button>
+                </div>
+            </div>
+        </Item>
+    );
+}
+export default LinkItem;
