@@ -60,7 +60,7 @@ function LinkItem (props) {
         const handleClose = () => {
             setOpen(false);
         };
-
+        const [links,setLink]=useState("")
         const [name, setName] = useState("");
         const [url, setUrl] = useState("");
         const [position_order, setPosition_order] =useState("");
@@ -68,19 +68,52 @@ function LinkItem (props) {
         const [error, setError] = useState("");
         const token = localStorage.getItem('token');
         console.log("token =>" , token);
-        const [link,setLink] =useState("");
-
-        const delete_link = async ()=>{
-            await axiox.delete(URL_API+`ck_link/${props.link.link_id}/`,{
+        
+        const delete_link = async () => {
+            try { 
+                await axiox.delete(URL_API+`ck_link/${props.link.link_id}/`,{
+                    headers: {
+                        'Authorization':`Bearer ${token}`
+                    },
+              })
+              console.log(`Link ${props.link.name} successfully deleted`)
+            } catch (error) {
+              alert(error)
+            }
+        }
+        const getData =()=>{
+            fetch(URL_API + 'ck_link/',{
                 headers: {
                     'Authorization':`Bearer ${token}`
-                },
-            });
-            setLink(link.filter((p) => p.id!== props.link.link_id))
-        } 
+                }
+            })
+            .then(res => res.json())
+            .then((res) => {
+                setName(props.link.name)
+                setUrl(props.link.url)
+                setPosition_order(props.link.position_order)
+                console.log(res.links.length)
+            })
+        }
+        useEffect(() => {
+            getData()
+        }, [])
+
+        
         const edit_link = (e) => {
             const URL_API = "https://api.cardkiller.me/";
             e.preventDefault();
+
+            const count = links.length;
+            console.log(count)
+            const position_order = count+1;
+
+            var data = {
+                'name':name,
+                'url':url,
+                'position_order':position_order,
+            }
+            console.log("data=>",data)
             axiox
               .put(URL_API + `ck_link/${props.link.link_id}/`, qs.stringify({
                 name,
@@ -92,7 +125,7 @@ function LinkItem (props) {
                     },
                 }  
               )
-              .then((response) => {
+            .then((response) => {
                 console.log("response", response.links);
                 setName("");
                 setUrl("");
@@ -123,12 +156,10 @@ function LinkItem (props) {
 					<Box sx={style}>
 			            <FormWrapper onSubmit={edit_link}> 
 						    
-						    <TextField id="name" label="Name" variant="standard" defaultValue={props.link.name}
+						    <TextField id="name" label="Name" variant="standard" value={name}
 											onChange={(e) => setName(e.target.value)} />
-							<TextField id="url" label="URL" variant="standard" defaultValue={props.link.url}
+							<TextField id="url" label="URL" variant="standard"   value={url}
 											onChange={(e) => setUrl(e.target.value)}/>
-							<TextField id="position" label="Position" variant="standard" defaultValue={props.link.position_order}
-											onChange={(e) => setPosition_order(e.target.value)}/>
 							<Button 
 								variant='contained' 
 											disableElevation 

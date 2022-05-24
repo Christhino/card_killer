@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React,{useState , useEffect} from 'react';
 import styled from 'styled-components';
+import QRcode from 'qrcode.react'
 import * as styles from '../../styles/variables';
 import UserProfileMask from "../../assets/img/user-profile-mask.png";
 import UserPhoto from "../../assets/img/user-photo.png";
@@ -9,6 +10,7 @@ export default function UserInfos() {
   const token = localStorage.getItem('token');
   console.log("token =>" , token);
   const [user, setUser] = useState([]);
+  const [link, setLink] = useState("https://api.cardkiller.me/ck_link/");
   const getData =()=>{
     fetch(URL_API + '/ck_user/',{
         headers: {
@@ -27,23 +29,45 @@ export default function UserInfos() {
         console.log(result);
         //const result = 
         setUser(result)
+        //setLink(result)
     })
   }
   useEffect(() => {
       getData()
   }, [token])
+  
+  const [qrscan, setQrscan] = useState('https://api.cardkiller.me/ck_user/');
+    const handleScan = data => {
+        if (data) {
+            setQrscan(data)
+        }
+  }
+
 
   return (
     <Main>
           <div className="photo">
               <img src={UserPhoto} />
           </div>
+          <div className="qrCode">
+                  <QRcode 
+                    value={link}
+                    bgColor='#383838'
+                    fgColor='#838383'
+                    id="myqr"                      
+                    size={40}
+                    includeMargin={true}
+                  />
+          </div>
         {user.map((item) =>(
           <div> 
               <div className="infos">
-                <p>{item.first_name}</p> <br/> <br/>
-                <p>{item.last_name}</p>
-                <p className="job">{item.job_title}</p>
+                <h1>{item.first_name}</h1><br/>
+                <h1>{item.last_name}</h1><br/>
+                <h2>{item.job_title}</h2><br/>
+                <h2>{item.current_company_name}</h2><br/>
+                <h2>{item.phone}</h2><br/>
+                <h2>{item.email}</h2><br/>         
               </div>
           </div>  
         ))}
@@ -62,6 +86,10 @@ const Main = styled.div`
   mask-repeat: no-repeat;
   margin: auto;
   margin-top: 30px;
+  .qrCode{
+     margin-top: -125px;
+     margin-left: 80px
+  }
   .photo{
     width: 175px;
     flex-shrink: 0;
@@ -73,13 +101,21 @@ const Main = styled.div`
   .infos{
     color: white;
     max-width: 10px;
-    p{
+    margin-left: -120px;
+    h1{
       font-weight: 400;
-      margin: 5px;
-      margin-top: 10px;
-      font-size: 24px;
-      font-weight: 300;
-      text-align: center;
+      font-family: 'Roboto';
+      font-style: normal;
+      font-size: 18px;
+      position: relative;
+      margin-top: 15px;
     }
+    h2{
+      font-weight: 400;
+      font-family: 'Roboto';
+      font-style: normal;
+      font-size: 12px;
+    }
+    
   }
 `;

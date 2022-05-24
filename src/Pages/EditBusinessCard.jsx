@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 import React,{useState,useEffect} from 'react';
 import styled from 'styled-components';
 import * as styles from '../styles/variables';
@@ -5,7 +6,38 @@ import axios  from 'axios'
 import { useFileUpload } from "use-file-upload";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import axiox from 'axios'
+import qs from "qs"
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import { useParams } from 'react-router-dom';
 const URL_API = "https://api.cardkiller.me";
+
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
+
 export default function EditBusinessCard() {
 
 
@@ -14,62 +46,88 @@ export default function EditBusinessCard() {
   const [data , setData]=useState([]);
   const [error, setError] = useState("");
    
-  const [first_name,setFirst_name]=useState([]);
-  const [last_name,setLast_name]=useState([]);
-  const [email,setEmail]=useState([]);
-  const [phone,setPhone]=useState([]);
-  const [job_title,setJob_tittle]=useState([]);
-  const [home_country,setHome_country]=useState([]);
-  const [website,setWebsite]=useState([]);
-  const [current_company_name,setCurrent_company_name]=useState([]);
+  const [first_name,setFirst_name]=useState('');
+  const [last_name,setLast_name]=useState('');
+  const [email,setEmail]=useState('');
+  const [phone,setPhone]=useState('');
+  const [job_title,setJob_tittle]=useState('');
+  const [home_country,setHome_country]=useState('');
+  const [website,setWebsite]=useState('');
+  const [current_company_name,setCurrent_company_name]=useState('');
 
   const token = localStorage.getItem('token');
   console.log("token =>" , token);
   
-  const add = (e) => {
+  useEffect(() => {
+    fetch(URL_API + "/ck_user/",{
+        headers: {
+          'Authorization':`Bearer ${token}`
+        }
+    })
+      .then(res => res.json())
+      .then(
+        (res) => {
 
-    e.preventDefault();
-    axios.put(URL_API + "/ck_user/", {
-           first_name,
-           last_name,
-           email,
-           phone,
-           job_title,
-           home_country,
-           website,
-           setCurrent_company_name,        
-        },{
-          headers: {
-            'Authorization':`Bearer ${token}`
-          }
-        }      
-    )
-      .then((response) => {
-        console.log(Object.keys(response));
-        const result = Object.keys(response).map(key => {
-          console.log(key); 
-          console.log(response[key]);
-        
-          return {[key]: response[key]};
-        });
-        console.log(result);
+          setFirst_name(res.first_name);
+          setLast_name(res.last_name) ;
+          setEmail(res.email);
+          setPhone(res.phone);
+          setJob_tittle(res.job_title);
+          setHome_country(res.home_country);    
+          setWebsite(res.website);
+          setCurrent_company_name(res.current_company_name)
 
-        setFirst_name("");
-        setLast_name("") ;
-        setEmail("");
-        setPhone("");
-        setJob_tittle("");
-        setHome_country("");
-        setError(result);
-        setWebsite("");
-        setCurrent_company_name("")
+          setError(res);
+          console.log(res)
+        },
         
+      )
+  }, [])
+  const handleSubmit = event => {
+    event.preventDefault();
+    var data = {
+      'first_name':first_name,
+      'last_name':last_name,
+      'email':email,
+      'phone':phone,
+      'job_title':job_title,
+      'home_country':home_country,
+      'website':website,
+      'current_company_name':current_company_name,
+    }
+    console.log("data_user_change=>",data)
+    axiox
+       .put(URL_API + `/ck_user/`, qs.stringify({
+          first_name,
+          last_name,
+          email,
+          phone,
+          job_title,
+          home_country,
+          website,
+          current_company_name
+        }),{
+            headers: {
+                        'Authorization':`Bearer ${token}`
+              },
+            }  
+        )
+      .then((res) => {
+          console.log("response", res);
+          setFirst_name('');
+          setLast_name('') ;
+          setEmail('');
+          setPhone('');
+          setJob_tittle('');
+          setHome_country('');    
+          setWebsite('');
+          setCurrent_company_name('')
       })
       .catch((error) => {
-        setError(error);
-        console.log(error.result.key);
-     }); 
-    }; 
+          setError(error);
+          console.log(error.response);
+      }); 
+  }
    
   return (
     <Wrapper>
@@ -79,7 +137,7 @@ export default function EditBusinessCard() {
       </Header>
       <GeneralInfo>
         <h4>GENERAL INFO</h4>
-        <form action="" onSubmit={add}>
+        <form action="" onSubmit={handleSubmit}>
             <div className="top">
               <div className="photo">
                   <button 
@@ -134,14 +192,14 @@ export default function EditBusinessCard() {
                   </div>
                 </div>
               </div>
-              <Button variant="contained" type="submit" sx={{ t:2 }}>
+              {/*<Button variant="contained" type="submit" sx={{ t:2 }}>
                 SAVE
-              </Button>
+                    </Button>*/}
+              <PreviewButton type="submit">MY SIGNATURE PREVIEW</PreviewButton>
             </div>
             
         </form>
       </GeneralInfo>
-      <PreviewButton>MY SIGNATURE PREVIEW</PreviewButton>
     </Wrapper>
   );
 }
@@ -263,3 +321,15 @@ const PreviewButton = styled.button`
   position: fixed;
   bottom: 0;
 `;
+
+/*
+var data = {
+      'first_name':first_name,
+      'last_name':last_name,
+      'email':email,
+      'phone':phone,
+      'job_title':job_title,
+      'home_country':home_country,
+      'website':website,
+      'setCurrent_company_name':setCurrent_company_name,
+    }*/

@@ -22,6 +22,8 @@ export const Login = ({setLogoutUser}) => {
       })
       .then((response) => {
         console.log("response", response.data.access);
+        console.log("response", response.data.refresh);
+        localStorage.setItem("refresh",response.data.refresh);
         localStorage.setItem("token",response.data.access,window.location.href = "/home");
        
         setError("");

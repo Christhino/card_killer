@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext} from "react";
 import styled from "styled-components";
 import * as styles from "../styles/variables";
 import ShareLink from "../components/Home/ShareLink";
@@ -19,6 +19,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
+import { AuthContext } from '../contexts/AuthContext';
 const SortableItem = SortableElement(({ link, toggleLink, selectCategory }) => {
 	let el = <LinkItem link={link} toggleLink={toggleLink} selectCategory={selectCategory} />
 	return el;
@@ -54,6 +55,9 @@ const style = {
   };
 const URL_API = "https://api.cardkiller.me";
 const Home= () => {
+
+
+	const auth = useContext(AuthContext);
     const [name, setName] = useState("");
     const [url, setUrl] = useState("");
 	const [position_order, setPosition_order] =useState("");
@@ -61,6 +65,11 @@ const Home= () => {
 	const add_link = (e) => {
 		const URL_API = "https://api.cardkiller.me/";
 		e.preventDefault();
+
+		const count = linksFoo.length;
+		console.log(count)
+		const position_order = count+1;
+
 		axiox
 		  .put(URL_API + "ck_link/", qs.stringify({
 			name,
@@ -68,7 +77,7 @@ const Home= () => {
 			position_order,
 		  }),{
 				headers: {
-					'Authorization':`Bearer ${token}`
+					Authorization: `Bearer ${token}`
 				},
 			}  
 		  )
@@ -76,12 +85,13 @@ const Home= () => {
 			console.log("response", response.links);
 			setName("");
 			setUrl("");
-			setPosition_order("");
+			setPosition_order(position_order);
 			setError("")
 		})
 		.catch((error) => {
 			setError(error);
-			console.log(error.response);
+			alert(error.response['message'])
+			console.log(error);
 		}); 
 		
 	}; 
@@ -107,7 +117,7 @@ const Home= () => {
 	const [links, setLinks] = useState(linksFoo);
 	const [openCategoryBottomSheet, setOpenCategoryBottomSheet] = useState(false);
 	const [selectedLinkId, setSelectedLinkId] = useState(0);
-	const token = localStorage.getItem('token');
+	const token = localStorage.getItem('token') || new Date(new Date().getTime() + 1000 * 60 * 60);
     console.log("token =>" , token);
     const getData =()=>{
         fetch(URL_API + '/ck_link/',{
@@ -128,8 +138,11 @@ const Home= () => {
 	const onSortEnd = ({ oldIndex, newIndex }) => {
 		let sortedLinks = arrayMoveImmutable(links, oldIndex, newIndex);
 		setLinks(sortedLinks);
-	};
 
+		console.log(oldIndex,newIndex,links)
+		
+	};
+    
 	const toggleLink = (linkId) => {
 		let linksTmp = links.slice();
 		let clicked = linksTmp.find(el => el.link_id=== linkId);
@@ -168,10 +181,9 @@ const Home= () => {
 						    
 						    <TextField id="name" label="Name" variant="standard" value={name}
 											onChange={(e) => setName(e.target.value)} />
-							<TextField id="url" label="URL" variant="standard" value={url}
+							<TextField id="url"  type="url" label="URL" placeholder="https://example.com" inputProps={{ pattern:"https?://.+" ,title:"Include http://"  }}   required variant="standard" defaultValue="https://"
 											onChange={(e) => setUrl(e.target.value)}/>
-							<TextField id="position" label="Position" variant="standard" value={position_order}
-											onChange={(e) => setPosition_order(e.target.value)}/>
+							
 							<Button 
 								variant='contained' 
 											disableElevation 

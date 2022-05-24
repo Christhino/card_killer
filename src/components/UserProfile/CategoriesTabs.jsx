@@ -8,16 +8,38 @@ import { HiOutlineExternalLink } from 'react-icons/hi';
 const URL_API = "https://api.cardkiller.me";
 export default function CategoriesTabs(props) {
   const [index, setIndex] = useState(0);
-  const [category, setCategory] = useState([]);
-  const [links, setLinks] = useState([]);
+  
   const token = localStorage.getItem('token');
   console.log("token =>" , token);
-  
+
+  const [data,setData]=useState([])
+  //const [category, setCategory] = useState([]);
+  //const [links, setLinks] = useState([]);
+
+  const gettap=()=>{
+    fetch(URL_API +'/tap/',{
+      headers: {
+        'Authorization':`Bearer ${token}`
+      }
+    })
+    .then((res) =>  res.json())
+    .then((res) => {
+        console.log(res.category)
+        console.log(res.links)
+        console.log(res.profile)
+        console.log(res)
+        setData(res.links)
+    })
+  }
+  useEffect(() => {
+    gettap()
+  }, []) 
+  /*
   const getDataLinks =()=>{
     fetch(URL_API + '/ck_link/',{
         headers: {
-    'Authorization':`Bearer ${token}`
-  }
+          'Authorization':`Bearer ${token}`
+        }
     })
     .then((res) =>  res.json())
     .then((res) => {
@@ -44,9 +66,9 @@ export default function CategoriesTabs(props) {
     useEffect(() => {
         getData()
     }, [])
-
+    */
   let slides = [];
-  slides = links.map((item, id) => {
+  slides = data.map((item, id) => {
     return (
       <div className="slide" key={id}>
         <ul>        
@@ -56,9 +78,8 @@ export default function CategoriesTabs(props) {
                   </div>
                   <div className="details" key={id.link_id}>
                     <strong className="title">{item.name}</strong>
-                    <small>{item.url}</small>
                   </div>
-                  <a href="">
+                  <a href={item.url}>
                     <HiOutlineExternalLink />
                   </a>
               </li> 
@@ -66,13 +87,13 @@ export default function CategoriesTabs(props) {
       </div>
     );
   });
-  let buttons = category.map((el, id) => {
+  let buttons = data.map((el, id) => {
     return (
       <button
         key={id}
         className={index === id ? "active" : ""}
         onClick={() => {setIndex(id)}}
-      >{el.name}</button>
+      >{el.category_name}</button>
     );
   });
   const handleChangeIndex = (index) => {
